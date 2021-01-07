@@ -13,7 +13,7 @@ spec:
         app: rso-content-model
     spec:
       containers:
-        - image: armkom/rso-content-model-api:1.0.0-SNAPSHOT-7.1
+        - image: armkom/rso-content-model-api:1.0.0-SNAPSHOT-1.1
           name: rso-content-model
           env:
             - name: KUMULUZEE_DATASOURCES0_CONNECTIONURL
@@ -35,12 +35,12 @@ spec:
               port: server
             initialDelaySeconds: 20
             periodSeconds: 3
-            readinessProbe:
-              httpGet:
-                path: /health/ready
-                port: server
-              initialDelaySeconds: 20
-              periodSeconds: 3
+          readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: server
+            initialDelaySeconds: 20
+            periodSeconds: 3
 
 ---
 
