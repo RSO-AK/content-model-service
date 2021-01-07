@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rso-content-model-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: rso-content-model
+  template:
+    metadata:
+      labels:
+        app: rso-content-model
+    spec:
+      containers:
+        - image: armkom/rso-content-model-api:1.0.0-SNAPSHOT-7.1
+          name: rso-content-model
+          env:
+            - name: KUMULUZEE_DATASOURCES0_CONNECTIONURL
+              value: jdbc:postgresql://ec2-54-247-107-109.eu-west-1.compute.amazonaws.com:5432/dfibhkev60bqq9
+            - name: KUMULUZEE_DATASOURCES0_USERNAME
+              value: qoexemnhfefspy
+            - name: KUMULUZEE_DATASOURCES0_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: pg-pass
+                  key: KUMULUZEE_DATASOURCES0_PASSWORD
+          ports:
+            - containerPort: 8080
+              name: server
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /health/live
+              port: server
+            initialDelaySeconds: 20
+            periodSeconds: 3
+            readinessProbe:
+              httpGet:
+                path: /health/ready
+                port: server
+              initialDelaySeconds: 20
+              periodSeconds: 3
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: rso-content-model
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 8080
+      protocol: TCP
+      targetPort: server
+  selector:
+    app: rso-content-model

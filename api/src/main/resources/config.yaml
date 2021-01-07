@@ -1,0 +1,35 @@
+kumuluzee:
+  name: rso-content-model-service
+  env:
+    name: dev
+  version: 1.0.0
+  server:
+    base-url: http://localhost:8080
+    http:
+      port: 8080
+  datasources:
+    - jndi-name: jdbc/ContentModelDS
+      connection-url: jdbc:postgresql://ec2-54-247-107-109.eu-west-1.compute.amazonaws.com:5432/dfibhkev60bqq9
+      username: qoexemnhfefspy
+      password: d56898d67f2ce6aef9b3b0715e99c1c0e7ebe12c5528fd03b13e6303fedd8de9
+      max-pool-size: 20
+  health:
+    checks:
+      data-source-health-check:
+        type: liveness
+        jndi-name: jdbc/ContentModelDS
+  metrics:
+    web-instrumentation:
+      - name: content-models-endpoint
+        url-pattern: /v1/content-model/*
+    servlet:
+      enabled: true
+      mapping: /my-metrics-servlet
+  cors-filter:
+    servlet:
+      allow-generic-http-requests: false
+      allow-origin: "*"
+rest-properties:
+  maintenance-mode: false
+  broken: false
+app-properties:
