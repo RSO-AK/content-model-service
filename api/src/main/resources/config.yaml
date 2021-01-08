@@ -13,11 +13,6 @@ kumuluzee:
       username: qoexemnhfefspy
       password: d56898d67f2ce6aef9b3b0715e99c1c0e7ebe12c5528fd03b13e6303fedd8de9
       max-pool-size: 20
-  health:
-    checks:
-      data-source-health-check:
-        type: liveness
-        jndi-name: jdbc/ContentModelDS
   metrics:
     web-instrumentation:
       - name: content-models-endpoint

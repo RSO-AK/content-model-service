@@ -13,7 +13,7 @@ spec:
         app: rso-content-model
     spec:
       containers:
-        - image: armkom/rso-content-model-api:1.0.0-SNAPSHOT-0.0
+        - image: armkom/rso-content-model-api:1.0.0-SNAPSHOT-3.1
           name: rso-content-model
           env:
             - name: KUMULUZEE_DATASOURCES0_CONNECTIONURL
@@ -29,6 +29,19 @@ spec:
             - containerPort: 8080
               name: server
               protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /health/live
+              port: server
+            initialDelaySeconds: 120
+            periodSeconds: 3
+          readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: server
+            initialDelaySeconds: 120
+            periodSeconds: 3
+      restartPolicy: Always
 
 ---
 
